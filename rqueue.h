@@ -41,6 +41,7 @@ public:
     , queue_(NULL)
     , index_(0)
   {
+    // should make sure size greater than 2
     queue_ = new T[size];
   }
 
