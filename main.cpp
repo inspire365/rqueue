@@ -23,6 +23,14 @@ int main()
     cout << "push exception i = " << i << " " <<  e.what() << endl;
   }
 
+  rq.pop();
+  rq.pop();
+  rq.pop();
+  rq.pop();
+  rq.push(100);
+  rq.push(101);
+  rq.push(102);
+
   cout << "now pop out from rqueue" << endl;
   try
   {
