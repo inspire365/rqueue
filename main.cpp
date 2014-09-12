@@ -3,6 +3,8 @@
 
 using namespace std;
 
+using ::can::common::rqueue;
+using ::can::common::rqueue_iterator;
 
 int main()
 {
@@ -30,6 +32,15 @@ int main()
   rq.push(100);
   rq.push(101);
   rq.push(102);
+
+
+  cout << "iterator output: " << endl;
+  rqueue_iterator<int> it(rq);
+  for(it.first(); !it.done(); it.next())
+  {
+    cout << "item: " << it.current() << endl;
+  }
+
 
   cout << "now pop out from rqueue" << endl;
   try

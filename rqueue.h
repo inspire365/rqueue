@@ -3,6 +3,9 @@
 
 #include <exception>
 #include <string>
+#include "iterator.h"
+
+namespace can { namespace common {
 
 class rexception : public ::std::exception
 {
@@ -29,6 +32,9 @@ private:
   ::std::string msg_;
 
 }; // rexception
+
+template<typename T>
+class rqueue_iterator;
 
 template<typename T>
 class rqueue
@@ -123,7 +129,60 @@ private:
   T*     queue_;  // queue storage
   size_t index_;  // the index of the position for the next push
 
+  friend class rqueue_iterator<T>;
+
 };  // rqueue
+
+template<typename T>
+class rqueue_iterator : public iterator<T>
+{
+public:
+
+  rqueue_iterator(const rqueue<T>& queue)
+  : queue_(queue)
+  , current_(0)
+  {
+    // empty
+  }
+
+  virtual ~ rqueue_iterator()
+  {
+    // empty
+  }
+
+  virtual void first()
+  {
+    size_t idx = queue_.size_ > queue_.index_ ? 
+                 (queue_.total_ - queue_.size_ + queue_.index_) : (queue_.index_ - queue_.size_);
+    current_ = idx;
+    //cout << "first: current " << current_ << endl;
+  }
+
+  virtual void next()
+  {
+    ++current_;
+    if (current_ >= queue_.total_) current_ = 0;
+  }
+
+  virtual bool done() const
+  {
+    //cout << "done:  current " << current_ << " index_ " << queue_.index_ << endl;
+    return (current_ == queue_.index_);
+  }
+
+  virtual const T& current() const
+  {
+    return queue_.queue_[current_];
+  }
+
+private:
+
+  size_t current_;
+  const rqueue<T>& queue_;
+
+};  // rqueue_iterator
+
+}} // ::can::common
 
 #endif // R_QUEUE_H_
 
